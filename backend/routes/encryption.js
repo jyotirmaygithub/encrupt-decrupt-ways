@@ -1,15 +1,9 @@
 const express = require('express');
+const router = express.Router();
 const multer = require('multer');
 const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
-const cors = require('cors'); // Import CORS
-
-const app = express();
-const port = 3001;
-
-// Enable CORS for all routes
-app.use(cors());
 
 const upload = multer({ dest: 'uploads/' });
 
@@ -23,6 +17,9 @@ function saveKey() {
 }
 
 function loadKey() {
+    if (!fs.existsSync('secret.key')) {
+        saveKey();
+    }
     return fs.readFileSync('secret.key');
 }
 
@@ -70,7 +67,7 @@ function decryptFile(filePath) {
 }
 
 // Endpoint to encrypt the file
-app.post('/encrypt', upload.single('file'), (req, res) => {
+router.post('/encrypt', upload.single('file'), (req, res) => {
     const encryptedFilePath = encryptFile(req.file.path);
     res.download(encryptedFilePath, () => {
         // Clean up temporary files after download
@@ -80,7 +77,7 @@ app.post('/encrypt', upload.single('file'), (req, res) => {
 });
 
 // Endpoint to decrypt the file
-app.post('/decrypt', upload.single('file'), (req, res) => {
+router.post('/decrypt', upload.single('file'), (req, res) => {
     try {
         const decryptedFilePath = decryptFile(req.file.path);
         res.download(decryptedFilePath, () => {
@@ -93,8 +90,4 @@ app.post('/decrypt', upload.single('file'), (req, res) => {
     }
 });
 
-// Start the server
-app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
-    saveKey(); // Save the key once when the server starts
-});
+module.exports = router;

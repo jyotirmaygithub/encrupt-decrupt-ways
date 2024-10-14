@@ -15,7 +15,7 @@ const FileUpload = () => {
     formData.append('file', file);
 
     try {
-      const response = await axios.post('http://localhost:3001/encrypt', formData, {
+      const response = await axios.post('http://localhost:3001/api/encryption/encrypt', formData, {
         responseType: 'blob',
       });
       const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -36,7 +36,7 @@ const FileUpload = () => {
     formData.append('file', file);
 
     try {
-      const response = await axios.post('http://localhost:3001/decrypt', formData, {
+      const response = await axios.post('http://localhost:3001/api/encryption/decrypt', formData, {
         responseType: 'blob',
       });
       const url = window.URL.createObjectURL(new Blob([response.data]));
