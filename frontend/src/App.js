@@ -1,13 +1,19 @@
-// src/App.js
-import React from 'react';
-import FileUpload from './FileUpload';
+import React from "react";
+import FileUploader from "./FileUpload";
+import ImageSteganography from "./ImageSteganography";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-const App = () => {
+function App() {
   return (
-    <div className="App">
-      <FileUpload />
-    </div>
+    <>
+          <Router>
+            <Routes>
+              <Route exact path="/" element={<FileUploader />} />
+              <Route exact path="/image" element={<ImageSteganography />} />         
+            </Routes>
+          </Router>
+    </>
   );
-};
+}
 
 export default App;
